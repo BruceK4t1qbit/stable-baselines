@@ -5,10 +5,10 @@ import pytest
 
 from stable_baselines import A2C, ACER, ACKTR, DQN, DDPG, PPO1, PPO2, SAC, TRPO
 
-tensorboard_dir = '/tmp/tb_dir/'
+TENSORBOARD_DIR = '/tmp/tb_dir/'
 
-if os.path.isdir(tensorboard_dir):
-	shutil.rmtree(tensorboard_dir)
+if os.path.isdir(TENSORBOARD_DIR):
+	shutil.rmtree(TENSORBOARD_DIR)
 
 MODEL_DICT = {
     'a2c': (A2C, 'CartPole-v1'),
@@ -27,6 +27,6 @@ N_STEPS = 1000
 @pytest.mark.parametrize("model_name", MODEL_DICT.keys())
 def test_tensorboard(model_name):
     algo, env_id = MODEL_DICT[model_name]
-    model = algo('MlpPolicy', env_id, verbose=1, tensorboard_log=tensorboard_dir)
+    model = algo('MlpPolicy', env_id, verbose=1, tensorboard_log=TENSORBOARD_DIR)
     model.learn(N_STEPS)
     model.learn(N_STEPS, reset_num_timesteps=False)
