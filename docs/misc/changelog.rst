@@ -5,7 +5,7 @@ Changelog
 
 For download links, please look at `Github release page <https://github.com/hill-a/stable-baselines/releases>`_.
 
-Pre-Release 2.4.1 (WIP)
+Pre-Release 2.4.1a (WIP)
 --------------------------
 
 - fixed computation of training metrics in TRPO and PPO1
@@ -14,6 +14,8 @@ Pre-Release 2.4.1 (WIP)
 - fixed image detection for tensorboard logging
 - fixed ACKTR for recurrent policies
 - fixed gym breaking changes
+- fixed custom policy examples in the doc for DQN and DDPG
+- remove gym spaces patch for equality functions
 
 
 Release 2.4.0 (2019-01-17)
