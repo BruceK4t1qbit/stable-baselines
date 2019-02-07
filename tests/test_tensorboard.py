@@ -8,7 +8,7 @@ from stable_baselines import A2C, ACER, ACKTR, DQN, DDPG, PPO1, PPO2, SAC, TRPO
 TENSORBOARD_DIR = '/tmp/tb_dir/'
 
 if os.path.isdir(TENSORBOARD_DIR):
-	shutil.rmtree(TENSORBOARD_DIR)
+    shutil.rmtree(TENSORBOARD_DIR)
 
 MODEL_DICT = {
     'a2c': (A2C, 'CartPole-v1'),
@@ -23,6 +23,7 @@ MODEL_DICT = {
 }
 
 N_STEPS = 1000
+
 
 @pytest.mark.parametrize("model_name", MODEL_DICT.keys())
 def test_tensorboard(model_name):
