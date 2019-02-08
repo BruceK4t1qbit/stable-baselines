@@ -16,6 +16,7 @@ Pre-Release 2.4.1a (WIP)
 - fixed gym breaking changes
 - fixed custom policy examples in the doc for DQN and DDPG
 - remove gym spaces patch for equality functions
+- fixed tensorflow dependency: cpu version was installed overwritting tensorflow-gpu when present.
 
 
 Release 2.4.0 (2019-01-17)
