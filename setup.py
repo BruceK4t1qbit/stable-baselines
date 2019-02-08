@@ -27,7 +27,7 @@ except ImportError:
 tf_dependency = []
 if install_tf:
     tf_dependency = ['tensorflow-gpu>=1.5.0'] if tf_gpu else ['tensorflow>=1.5.0']
-    if tpu_gpu:
+    if tf_gpu:
         print("A GPU was detected, tensorflow-gpu will be installed")
 
 
