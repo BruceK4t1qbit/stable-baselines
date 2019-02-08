@@ -362,7 +362,7 @@ class SAC(OffPolicyRLModel):
                 if callback is not None:
                     # Only stop training if return value is False, not when it is None. This is for backwards
                     # compatibility with callbacks that have no return statement.
-                    if callback(locals(), globals()) is False:
+                    if callback(locals(), globals()) is False:  #  __A:  Clever way to share the reference to entire environment!
                         break
 
                 # Before training starts, randomly sample actions
@@ -370,6 +370,7 @@ class SAC(OffPolicyRLModel):
                 # Afterwards, use the learned policy.
                 if step < self.learning_starts:
                     action = self.env.action_space.sample()
+                    self.env.render()
                     # No need to rescale when sampling random action
                     rescaled_action = action
                 else:
@@ -380,7 +381,9 @@ class SAC(OffPolicyRLModel):
                 assert action.shape == self.env.action_space.shape
 
                 new_obs, reward, done, info = self.env.step(rescaled_action)
-
+                if step % 10 == 0 and (step//100) % 10 == 0:
+                    print(f" s, r: [[{list(new_obs[:4]), reward}]]")
+                
                 # Store transition in the replay buffer.
                 self.replay_buffer.add(obs, action, reward, new_obs, float(done))
                 obs = new_obs
@@ -412,7 +415,7 @@ class SAC(OffPolicyRLModel):
                         # Update target network
                         if (step + grad_step) % self.target_update_interval == 0:
                             # Update target network
-                            self.sess.run(self.target_update_op)
+                            self.sess.run(self.target_update_op)  #  __A:  # self.target_update_op copies over the weights (a big list of ops).  Currently just a bit, so doing polyack averaging
                     # Log losses and entropy, useful for monitor training
                     if len(mb_infos_vals) > 0:
                         infos_values = np.mean(mb_infos_vals, axis=0)

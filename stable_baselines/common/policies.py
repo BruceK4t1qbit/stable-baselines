@@ -111,7 +111,7 @@ class BasePolicy(ABC):
         self.n_steps = n_steps
         with tf.variable_scope("input", reuse=False):
             if obs_phs is None:
-                self.obs_ph, self.processed_obs = observation_input(ob_space, n_batch, scale=scale)
+                self.obs_ph, self.processed_obs = observation_input(ob_space, n_batch, scale=scale)  #  __A:  _ph=placeholder, the other part has some processing (converted to floats
             else:
                 self.obs_ph, self.processed_obs = obs_phs
 
