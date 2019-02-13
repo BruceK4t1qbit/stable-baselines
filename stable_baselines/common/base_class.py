@@ -227,7 +227,7 @@ class BaseRLModel(ABC):
             cloudpickle.dump((data, params), save_path)
 
     @staticmethod
-    def _load_from_file(load_path):
+    def _load_from_file(load_path):  #  __c:  So, they're using cloudpickle to load params and other stuff from a single pickle file!
         if isinstance(load_path, str):
             if not os.path.exists(load_path):
                 if os.path.exists(load_path + ".pkl"):
@@ -422,9 +422,10 @@ class ActorCriticRLModel(BaseRLModel):
         pass
 
     @classmethod
-    def load(cls, load_path, env=None, **kwargs):
+    def load(cls, load_path, env=None, **kwargs):  #  __c:  They seem to have handled this quite nicely!
         data, params = cls._load_from_file(load_path)
 
+        #  __c:  Policy compatibility nicely handled!
         if 'policy_kwargs' in kwargs and kwargs['policy_kwargs'] != data['policy_kwargs']:
             raise ValueError("The specified policy kwargs do not equal the stored policy kwargs. "
                              "Stored kwargs: {}, specified kwargs: {}".format(data['policy_kwargs'],
@@ -434,7 +435,7 @@ class ActorCriticRLModel(BaseRLModel):
         model.__dict__.update(data)
         model.__dict__.update(kwargs)
         model.set_env(env)
-        model.setup_model()
+        model.setup_model()  #  __c:  So this is delayed until after they've updated with the saved 'data' and some over-riding 'kwargs'
 
         restores = []
         for param, loaded_p in zip(model.params, params):

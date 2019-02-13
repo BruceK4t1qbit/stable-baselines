@@ -381,8 +381,8 @@ class SAC(OffPolicyRLModel):
                 assert action.shape == self.env.action_space.shape
 
                 new_obs, reward, done, info = self.env.step(rescaled_action)
-                if step % 10 == 0 and (step//100) % 10 == 0:
-                    print(f" s, r: [[{list(new_obs[:4]), reward}]]")
+                if step % 10 == 0 and (step//100) % 100 == 1:  # #  __c:  Print a few states and actions only every so often
+                    print(f" s, r: [[{list(new_obs[:3]), reward}]]")
                 
                 # Store transition in the replay buffer.
                 self.replay_buffer.add(obs, action, reward, new_obs, float(done))
