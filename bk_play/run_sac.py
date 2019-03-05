@@ -23,21 +23,31 @@ learning_rate=3e-4
 # env = gym.make("RoboschoolInvertedPendulumSwingup-v1")
 # env = gym.make("RoboschoolInvertedDoublePendulum-v1")
 # env = gym.make("RoboschoolReacher-v1")
-# env = gym.make("RoboschoolHopper-v1")
+
+buffer_size=100000
+batch_size=64
+gradient_steps=1
+ent_coef=0.01
+env = gym.make("RoboschoolHopper-v1")
 # env = gym.make("RoboschoolWalker2d-v1")
 # env = gym.make("RoboschoolHalfCheetah-v1")
 
-buffer_size=1000000
-gradient_steps=1
-env = gym.make("RoboschoolAnt-v1")
-target_entropy=-np.prod(env.action_space.shape).astype(np.float32)*.75
+# buffer_size=1000000
+# batch_size=256
+# gradient_steps=1
+# ent_coef=0.01
+# env = gym.make("RoboschoolAnt-v1")
+# target_entropy=-np.prod(env.action_space.shape).astype(np.float32)*.75
 
-# buffer_size=200000
-# gradient_steps=5
+# buffer_size=1000000
+# gradient_steps=1
+# batch_size=64
+# ent_coef='auto'
 # env = gym.make("RoboschoolHumanoid-v1")
 # target_entropy=-np.prod(env.action_space.shape).astype(np.float32)*1
 
 # env = gym.make("RoboschoolHumanoidFlagrun-v1")
+# env = gym.make("RoboschoolHumanoidFlagrunHarder-v1")
 # env = gym.make("RoboschoolAtlasForwardWalk-v1")
 # env = gym.make("RoboschoolPong-v1")
 
@@ -54,17 +64,18 @@ from stable_baselines.common.policies import register_policy
 class CustomSACPolicy(SACPolicy):
     def __init__(self, *args, **kwargs):
         super(CustomSACPolicy, self).__init__(*args, **kwargs,
-                                              layers=[256, 256],
+                                              # layers=[256, 256],
+                                              layers=[512, 512],
                                               feature_extraction="mlp")
 register_policy('CustomSACPolicy', CustomSACPolicy)  #  __c:  Could probably just provide this directly as well!
 
 hyper_params = {'policy': 'CustomSACPolicy',  #  __c:  It will figure out the
- 'learning_rate': lambda f : f*3e-4,  # f is the fraction left to go
- 'buffer_size': 1000000,
- 'batch_size': 256,
- 'ent_coef': 0.01,
+ 'learning_rate': lambda f : f*learning_rate,  # f is the fraction left to go
+ 'buffer_size': buffer_size,
+ 'batch_size': batch_size,
+ 'ent_coef': ent_coef,
  'train_freq': 1,
- 'gradient_steps': 1,
+ 'gradient_steps': gradient_steps,
  'learning_starts': 1000}
 
 # model = PPO2(MlpPolicy, env, verbose=1)
@@ -81,7 +92,7 @@ model = SAC(env=env,
 #             learning_rate=learning_rate,
 #             target_entropy=-target_entropy
 #             )  # todo try lowering the target entropy!  Also, try lowering the learning rate b/c maybe hitting edge cases too rarely!
-model.learn(total_timesteps=6000000)
+model.learn(total_timesteps=60000000)
 
 obs = env.reset()
 n = 1000
